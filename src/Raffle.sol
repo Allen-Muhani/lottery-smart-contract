@@ -20,7 +20,7 @@
 // view & pure functions
 
 // SPDX-License-Identifier: MIT
-https://youtu.be/sas02qSFZ74?t=17919
+// https://youtu.be/sas02qSFZ74?t=17919
 
 pragma solidity ^0.8.0;
 
@@ -267,5 +267,12 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
      */
     function getEntranceFee() external view returns (uint256) {
         return i_entranceFee;
+    }
+
+    /**
+     * Gets the rafle state.
+     */
+    function getRaffleState() external view returns (RaffleState) {
+        return s_raffleState;
     }
 }
