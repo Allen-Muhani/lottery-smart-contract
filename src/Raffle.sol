@@ -158,6 +158,10 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
     function enterRaffle() external payable {
         if (msg.value < i_entranceFee)
             revert Raffle__NotEnoughETHSSent(msg.value, i_entranceFee);
+        
+        if (s_raffleState != RaffleState.OPEN)
+            revert Raffle_RaffleNotOpen();
+    
 
         s_players.push(payable(msg.sender));
 
@@ -181,7 +185,7 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
     ) public view override returns (bool upkeepNeeded, bytes memory) {
         bool playersPresent = s_players.length > 1;
         bool raffleOpen = s_raffleState == RaffleState.OPEN;
-        bool timeHasPassed = (block.timestamp - s_lastTimeStamp < i_interval);
+        bool timeHasPassed = (block.timestamp - s_lastTimeStamp > i_interval);
         bool hasBalance = address(this).balance > 0;
 
         upkeepNeeded =
@@ -219,7 +223,7 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
         }
 
         s_raffleState = RaffleState.CALCULATING;
-
+        
         s_vrfCoordinator.requestRandomWords(
             VRFV2PlusClient.RandomWordsRequest({
                 keyHash: i_Key_Hash_Gas_Lane,

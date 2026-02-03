@@ -93,6 +93,7 @@ contract RaffleTest is Test {
         raffle.enterRaffle{value: entranceFee}();
     }
 
+    //forge test --match-test testCantEnterWhenRaffleIsCalculating -vvvvv
     function testCantEnterWhenRaffleIsCalculating() public { 
         vm.prank(PLAYER_2);
         raffle.enterRaffle{value: entranceFee}();
@@ -104,6 +105,8 @@ contract RaffleTest is Test {
         vm.roll(block.number + 1);
 
         raffle.performUpkeep("");
+
+        assert(raffle.getRaffleState() == Raffle.RaffleState.CALCULATING);
 
         vm.expectRevert(Raffle.Raffle_RaffleNotOpen.selector);
         vm.prank(PLAYER_1);
