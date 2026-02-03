@@ -20,7 +20,7 @@
 // view & pure functions
 
 // SPDX-License-Identifier: MIT
-// https://youtu.be/sas02qSFZ74?t=17919
+// https://youtu.be/sas02qSFZ74?t=19112
 
 pragma solidity ^0.8.0;
 
@@ -35,6 +35,7 @@ import {AutomationCompatibleInterface} from "chainlink-brownie-contracts/contrac
  * @dev Implements Chainlink VRFv2
  */
 contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
+
     /** Errors */
     error Raffle__NotEnoughETHSSent(uint256 amountSent, uint256 requiredAmount);
 
@@ -274,5 +275,13 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
      */
     function getRaffleState() external view returns (RaffleState) {
         return s_raffleState;
+    }
+
+    /**
+     * Gets a player given an index.
+     * @param playerIndex the index of the player we want.
+     */
+    function getPlayer(uint256 playerIndex) external view returns (address) {
+        return s_players[playerIndex];
     }
 }
